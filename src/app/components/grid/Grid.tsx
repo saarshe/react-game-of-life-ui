@@ -1,14 +1,15 @@
 // src/components/Grid.tsx
 import React, { useCallback } from 'react';
 import { useAppDispatch } from '../../store/store';
-import { toggleCell } from '../game-controller/gameSlice';
+import { GenerationsHistogramData, GridData, MAX_HISTOGRAM_GENERATIONS, toggleCell } from '../game-controller/gameSlice';
 import './Grid.css';
 
 interface GridProps {
-	gridData: boolean[][];
+	gridData: GridData;
+	histogramData: GenerationsHistogramData;
 }
 
-export const Grid: React.FC<GridProps> = ({ gridData: gridData }) => {
+export const Grid: React.FC<GridProps> = ({ gridData, histogramData }) => {
 	const dispatch = useAppDispatch();
 
 	const handleToggleCell = useCallback(
@@ -18,6 +19,11 @@ export const Grid: React.FC<GridProps> = ({ gridData: gridData }) => {
 		[dispatch],
 	);
 
+	const getStyles = (value: number): React.CSSProperties => {
+		if (value <= 0) return {};
+		return { background: 'blue', opacity: (MAX_HISTOGRAM_GENERATIONS - 3 * value) / MAX_HISTOGRAM_GENERATIONS };
+	};
+
 	return (
 		<div className="grid">
 			{gridData.map((row, rowIndex) => (
@@ -26,6 +32,7 @@ export const Grid: React.FC<GridProps> = ({ gridData: gridData }) => {
 						<div
 							key={colIndex}
 							className={`cell ${cell ? 'alive' : 'dead'}`}
+							style={getStyles(histogramData[rowIndex][colIndex])}
 							onClick={() => handleToggleCell(rowIndex, colIndex)}
 						></div>
 					))}

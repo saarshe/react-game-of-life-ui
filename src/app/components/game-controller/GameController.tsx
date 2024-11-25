@@ -5,7 +5,7 @@ import { useGameRules } from './GameRules';
 
 export const useGameController = () => {
 	const dispatch = useAppDispatch();
-	const { gridData, isRunning } = useAppSelector((state) => state.game);
+	const { isRunning, generationsHistogram, gridData } = useAppSelector((state) => state.game);
 	const { handleGameTick } = useGameRules();
 
 	const handleStart = () => {
@@ -25,7 +25,7 @@ export const useGameController = () => {
 		if (isRunning) {
 			interval = setInterval(() => {
 				handleGameTick();
-			}, 1000);
+			}, 100);
 		} else {
 			if (interval) clearInterval(interval);
 		}
@@ -34,5 +34,5 @@ export const useGameController = () => {
 		};
 	}, [isRunning, dispatch, handleGameTick]);
 
-	return { gridData, isRunning, handleStart, handleStop, handleReset };
+	return { gridData, generationsHistogram, isRunning, handleStart, handleStop, handleReset };
 };

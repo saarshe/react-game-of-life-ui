@@ -2,6 +2,7 @@
     display: grid;
     gap: 1px;
     margin: 20px auto;
+    background: white
 }
 
 .row {

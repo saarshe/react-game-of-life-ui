@@ -1,11 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-const GRID_SIZE = 30;
+export const GRID_SIZE = 30;
 
-type GridData = boolean[][];
+export type GridData = boolean[][];
+export type GenerationsHistogramData = number[][];
+export const MAX_HISTOGRAM_GENERATIONS = 100;
 
 interface GameState {
 	gridData: GridData;
+	generationsHistogram: GenerationsHistogramData;
 	isRunning: boolean;
 }
 
@@ -13,6 +16,9 @@ const initialState: GameState = {
 	gridData: Array(GRID_SIZE)
 		.fill(null)
 		.map(() => Array(GRID_SIZE).fill(false)),
+	generationsHistogram: Array(GRID_SIZE)
+		.fill(-1)
+		.map(() => Array(GRID_SIZE).fill(-1)),
 	isRunning: false,
 };
 
@@ -37,10 +43,8 @@ const gameSlice = createSlice({
 			state.isRunning = false;
 		},
 		tick: (state, payload) => {
-			console.warn('tick is not implemented', {
-				state,
-				payload,
-			});
+			state.gridData = payload.payload.newGridData;
+			state.generationsHistogram = payload.payload.newGenerationsHistogram;
 		},
 	},
 });
